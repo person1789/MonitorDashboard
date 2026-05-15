@@ -125,35 +125,51 @@
 
         /* Idle */
         .idle-content {
-            display: flex;
-            flex-direction: row;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            width: 100%; max-width: 900px;
+            gap: 40px;
+        }
+
+        .idle-top-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
             align-items: baseline;
-            justify-content: center;
-            gap: 36px;
             width: 100%;
+            padding: 0 40px;
         }
 
         .idle-time {
-            font-size: 3.8rem;
+            font-size: 3.2rem;
             font-weight: 200;
             letter-spacing: -0.04em;
             color: var(--text-primary);
+            text-align: left;
         }
 
         .idle-date {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 400;
             color: var(--text-secondary);
+            text-align: center;
         }
 
         .idle-weather {
-            font-size: 0.95rem;
-            color: var(--text-tertiary);
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-align: right;
+            display: flex; align-items: center; justify-content: flex-end; gap: 8px;
         }
 
         .idle-day-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 9999px;
             font-size: 1rem;
             color: var(--text-secondary);
+            backdrop-filter: blur(10px);
         }
 
         .idle-day-badge .day-num {
@@ -315,14 +331,21 @@
 
     <div class="status-dot disconnected" id="status-dot"></div>
 
-    <!-- Idle screen -->
+    <!-- Idle Dock Screen -->
     <div class="screen" id="idle-screen">
         <div class="idle-content">
-            <div class="idle-time" id="idle-time">--:--</div>
-            <div class="idle-date" id="idle-date"></div>
-            <div class="idle-day-badge">Day <span class="day-num" id="idle-day-num">—</span> of 90</div>
+            <div class="idle-top-row">
+                <div class="idle-time" id="idle-time"></div>
+                <div class="idle-date" id="idle-date"></div>
+                <div class="idle-weather" id="idle-weather">73°F ☀️</div>
+            </div>
+            
+            <div class="idle-day-badge" id="idle-day-badge">
+                Day <span class="day-num" id="idle-day-num">—</span> of 90
+            </div>
+
+            <div class="idle-hint">Dock ready. Start a session from dashboard.</div>
         </div>
-        <div class="idle-hint">Dock ready — start a session from dashboard</div>
     </div>
 
     <!-- Active study screen -->
@@ -403,7 +426,12 @@
         // ---- Timer tick ----
         function tickTimer() {
             if (!session || !session.active || !session.timerEnd) return;
-            const remaining = Math.max(0, session.timerEnd - Date.now());
+            
+            // Adjust for clock offset between devices using the message timestamp
+            const clockOffset = Date.now() - (session.timestamp || Date.now());
+            const adjustedTimerEnd = session.timerEnd + clockOffset;
+            
+            const remaining = Math.max(0, adjustedTimerEnd - Date.now());
             const totalMs = (session.timerMinutes || 25) * 60 * 1000;
             const pct = Math.min(100, ((totalMs - remaining) / totalMs) * 100);
 
