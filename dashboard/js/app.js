@@ -77,6 +77,10 @@ async function showDashboard() {
 
     // 4. Wire up layout mode
     wireLayoutMode();
+
+    // 5. Wire up Focus mode (phone sync)
+    wireFocusMode();
+    connectToServer();
 }
 
 // ---- Module Lifecycle ----
@@ -300,5 +304,126 @@ async function rebuildModules() {
     }
 }
 
+// ---- Focus Mode (Phone Sync via Firebase) ----
+
+const firebaseConfig = {
+    apiKey: "AIzaSyASVdJsoEQTajPrXBvZWuNDCyyg5arDQek",
+    authDomain: "dashboard-4d62c.firebaseapp.com",
+    projectId: "dashboard-4d62c",
+    databaseURL: "https://dashboard-4d62c-default-rtdb.firebaseio.com",
+    storageBucket: "dashboard-4d62c.firebasestorage.app",
+    messagingSenderId: "364307656847",
+    appId: "1:364307656847:web:cd61a1ef49101961c640fa",
+    measurementId: "G-8DDSN730Z4"
+};
+
+// Initialize Firebase
+let db = null;
+if (window.firebase) {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+}
+
+let focusActive = false;
+let selectedDuration = 25;
+
+function wireFocusMode() {
+    const focusFab = document.getElementById('btn-focus');
+    const popover = document.getElementById('focus-popover');
+    const startBtn = document.getElementById('focus-start');
+    const subjectSelect = document.getElementById('focus-subject');
+    const taskInput = document.getElementById('focus-task');
+    const durBtns = document.querySelectorAll('.focus-dur-btn');
+
+    if (!focusFab) return;
+
+    // Duration buttons
+    durBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            durBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedDuration = parseInt(btn.dataset.min);
+        });
+    });
+
+    // Toggle popover
+    focusFab.addEventListener('click', () => {
+        if (focusActive) {
+            endFocusSession();
+        } else {
+            popover.classList.toggle('visible');
+        }
+    });
+
+    // Close popover when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!popover.contains(e.target) && e.target !== focusFab) {
+            popover.classList.remove('visible');
+        }
+    });
+
+    // Start session
+    startBtn.addEventListener('click', () => {
+        const subject = subjectSelect.value;
+        const task = taskInput.value.trim();
+        startFocusSession(subject, task, selectedDuration);
+        popover.classList.remove('visible');
+    });
+}
+
+async function startFocusSession(subject, task, minutes) {
+    if (!db) return;
+    
+    const sessionData = {
+        active: true,
+        subject: subject || 'General',
+        task: task || '',
+        timerMinutes: minutes || 25,
+        timerEnd: Date.now() + (minutes || 25) * 60 * 1000,
+        timestamp: Date.now()
+    };
+
+    try {
+        await db.ref('studySession').set(sessionData);
+    } catch (err) {
+        console.error('[Focus] Firebase error:', err);
+    }
+}
+
+async function endFocusSession() {
+    if (!db) return;
+    try {
+        await db.ref('studySession').update({ active: false });
+    } catch (err) {
+        console.error('[Focus] Firebase error:', err);
+    }
+}
+
+function initFirebaseSync() {
+    if (!db) return;
+
+    db.ref('studySession').on('value', (snapshot) => {
+        const data = snapshot.val();
+        const focusFab = document.getElementById('btn-focus');
+        if (!focusFab) return;
+
+        if (data && data.active) {
+            focusActive = true;
+            focusFab.classList.add('active');
+            focusFab.title = 'End Focus Session';
+        } else {
+            focusActive = false;
+            focusFab.classList.remove('active');
+            focusFab.title = 'Start Focus Session';
+        }
+    });
+}
+
+// Re-map start function to use new sync name
+function connectToServer() {
+    initFirebaseSync();
+}
+
 // ---- Start ----
 boot();
+

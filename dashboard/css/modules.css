@@ -539,7 +539,7 @@
 }
 .cb-select { max-width: 130px; }
 .cb-input { flex: 1; min-width: 120px; }
-.cb-select option { background: #1a1a2e; color: var(--text-primary); }
+.cb-select option { background: #fff; color: #000; }
 
 .cb-btn {
     padding: 5px 12px; border-radius: var(--r-md);

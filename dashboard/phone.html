@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#080816">
+    <title>Study Dock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --text-primary:   rgba(255,255,255,0.92);
+            --text-secondary: rgba(255,255,255,0.52);
+            --text-tertiary:  rgba(255,255,255,0.28);
+            --accent-physics: #60A5FA;
+            --accent-math:    #34D399;
+            --accent-ece:     #A78BFA;
+            --accent-latin:   #FBBF24;
+            --accent-coding:  #F472B6;
+            --accent-general: #94A3B8;
+        }
+
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: #080816;
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* ---- Ambient Background ---- */
+        .bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: linear-gradient(135deg, #080816 0%, #0c1025 30%, #0a1628 60%, #080816 100%);
+            overflow: hidden;
+        }
+        .bg-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(120px); opacity: 0.2;
+            will-change: transform;
+            transition: background 2s ease, opacity 2s ease;
+        }
+        .bg-orb--1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #1e40af, transparent 70%);
+            top: -30%; left: -10%;
+            animation: drift1 20s ease-in-out infinite alternate;
+        }
+        .bg-orb--2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #5b21b6, transparent 70%);
+            bottom: -20%; right: -5%;
+            animation: drift2 25s ease-in-out infinite alternate;
+        }
+        @keyframes drift1 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.1); }
+        }
+        @keyframes drift2 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-60px, -40px) scale(1.15); }
+        }
+
+        /* ---- Shared ---- */
+        .screen {
+            position: fixed; inset: 0; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+        }
+
+        /* ---- Idle Dock Screen ---- */
+        .idle-content {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 12px; width: 100%;
+        }
+        .idle-top-row {
+            display: flex; align-items: baseline; justify-content: center;
+            gap: 40px; width: 100%;
+        }
+        .idle-time {
+            font-size: 3.8rem;
+            font-weight: 200;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+        }
+        .idle-date {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        .idle-weather {
+            font-size: 0.95rem;
+            color: var(--text-tertiary);
+        }
+        .idle-day-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px;
+            background: rgba(96,165,250,0.1);
+            border: 1px solid rgba(96,165,250,0.2);
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-physics);
+        }
+        .idle-day-badge .day-num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .idle-hint {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            animation: pulse 2.5s ease-in-out infinite;
+            margin-top: 8px;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50%      { opacity: 0.8; }
+        }
+
+        /* ---- Active Study Screen ---- */
+        .study-content {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; width: 100%; max-width: 700px;
+        }
+        .study-subject {
+            display: inline-flex; align-items: center;
+            padding: 5px 16px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .study-timer {
+            font-size: 5.5rem;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        .study-task {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 500px;
+        }
+        .study-progress-wrap {
+            width: 100%; max-width: 400px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.06);
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .study-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s linear;
+        }
+        .study-complete {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-math);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* ---- Status Indicator ---- */
+        .status-dot {
+            position: fixed; top: 16px; right: 16px; z-index: 10;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #34D399;
+            box-shadow: 0 0 8px rgba(52,211,153,0.5);
+            transition: background 0.3s;
+        }
+        .status-dot.disconnected {
+            background: #FB923C;
+            box-shadow: 0 0 8px rgba(251,146,60,0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="bg">
+        <div class="bg-orb bg-orb--1" id="orb1"></div>
+        <div class="bg-orb bg-orb--2" id="orb2"></div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="status-dot" id="status-dot" title="Server connection"></div>
+
+    <!-- Idle Dock Screen -->
+    <div class="screen" id="idle-screen">
+        <div class="idle-content">
+            <div class="idle-top-row">
+                <div class="idle-time" id="idle-time"></div>
+                <div class="idle-date" id="idle-date"></div>
+                <div class="idle-weather" id="idle-weather"></div>
+            </div>
+            <div class="idle-day-badge" id="idle-day-badge">
+                🎯 <span class="day-num" id="idle-day-num">—</span> of 90
+            </div>
+            <div class="idle-hint">Dock ready — start a session from dashboard</div>
+        </div>
+    </div>
+
+    <!-- Active Study Screen -->
+    <div class="screen hidden" id="study-screen">
+        <div class="study-content">
+            <div class="study-subject" id="study-subject"></div>
+            <div class="study-timer" id="study-timer">25:00</div>
+            <div class="study-task" id="study-task"></div>
+            <div class="study-progress-wrap">
+                <div class="study-progress-bar" id="study-progress"></div>
+            </div>
+            <div class="study-complete hidden" id="study-complete">Session Complete ✓</div>
+        </div>
+    </div>
+
+    <script>
+        // ---- Config ----
+        const firebaseConfig = {
+            apiKey: "AIzaSyASVdJsoEQTajPrXBvZWuNDCyyg5arDQek",
+            authDomain: "dashboard-4d62c.firebaseapp.com",
+            projectId: "dashboard-4d62c",
+            databaseURL: "https://dashboard-4d62c-default-rtdb.firebaseio.com",
+            storageBucket: "dashboard-4d62c.firebasestorage.app",
+            messagingSenderId: "364307656847",
+            appId: "1:364307656847:web:cd61a1ef49101961c640fa",
+            measurementId: "G-8DDSN730Z4"
+        };
+
+        const PLAN_START = new Date('2026-06-01');
+        const ACCENT_MAP = {
+            'Physics':  { color: '#60A5FA', bg: 'rgba(96,165,250,0.15)',  orb: '#1e40af' },
+            'Math':     { color: '#34D399', bg: 'rgba(52,211,153,0.15)',  orb: '#065f46' },
+            'ECE':      { color: '#A78BFA', bg: 'rgba(167,139,250,0.15)', orb: '#5b21b6' },
+            'Latin':    { color: '#FBBF24', bg: 'rgba(251,191,36,0.15)',  orb: '#78350f' },
+            'Coding':   { color: '#F472B6', bg: 'rgba(244,114,182,0.15)', orb: '#831843' },
+            'General':  { color: '#94A3B8', bg: 'rgba(148,163,184,0.15)', orb: '#334155' },
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // ---- State ----
+        let session = { active: false };
+        let timerInterval = null;
+        let clockInterval = null;
+        let wakeLock = null;
+
+        // ---- DOM ----
+        const idleScreen  = document.getElementById('idle-screen');
+        const studyScreen = document.getElementById('study-screen');
+        const idleTime    = document.getElementById('idle-time');
+        const idleDate    = document.getElementById('idle-date');
+        const idleWeather = document.getElementById('idle-weather');
+        const idleDayNum  = document.getElementById('idle-day-num');
+        const studySubject  = document.getElementById('study-subject');
+        const studyTimer    = document.getElementById('study-timer');
+        const studyTask     = document.getElementById('study-task');
+        const studyProgress = document.getElementById('study-progress');
+        const studyComplete = document.getElementById('study-complete');
+        const statusDot     = document.getElementById('status-dot');
+        const orb1 = document.getElementById('orb1');
+        const orb2 = document.getElementById('orb2');
+
+        // ---- Clock ----
+        function updateClock() {
+            const now = new Date();
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            idleTime.textContent = `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            idleDate.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+
+            // Day of plan
+            const diff = Math.floor((now - PLAN_START) / 86400000) + 1;
+            if (diff >= 1 && diff <= 90) {
+                idleDayNum.textContent = diff;
+            } else if (diff < 1) {
+                idleDayNum.textContent = 'T-' + Math.abs(diff);
+            } else {
+                idleDayNum.textContent = '✓';
+            }
+        }
+
+        // ---- Timer ----
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(tickTimer, 250);
+        }
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+        function tickTimer() {
+            if (!session.active || !session.timerEnd) return;
+            const remaining = Math.max(0, session.timerEnd - Date.now());
+            const totalMs = (session.timerMinutes || 25) * 60 * 1000;
+            const elapsed = totalMs - remaining;
+            const pct = Math.min(100, (elapsed / totalMs) * 100);
+
+            const secs = Math.ceil(remaining / 1000);
+            const mm = Math.floor(secs / 60);
+            const ss = secs % 60;
+            studyTimer.textContent = `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+
+            const accent = ACCENT_MAP[session.subject] || ACCENT_MAP['General'];
+            studyProgress.style.width = `${pct}%`;
+            studyProgress.style.background = accent.color;
+
+            if (remaining <= 0) {
+                studyTimer.textContent = '00:00';
+                studyComplete.classList.remove('hidden');
+                studyProgress.style.width = '100%';
+                stopTimer();
+            }
+        }
+
+        // ---- State Transitions ----
+        function showIdle() {
+            idleScreen.classList.remove('hidden');
+            studyScreen.classList.add('hidden');
+            stopTimer();
+            // Reset orb colors
+            orb1.style.background = 'radial-gradient(circle, #1e40af, transparent 70%)';
+            orb2.style.background = 'radial-gradient(circle, #5b21b6, transparent 70%)';
+        }
+
+        function showStudy(data) {
+            session = data;
+            const accent = ACCENT_MAP[data.subject] || ACCENT_MAP['General'];
+
+            // Subject badge
+            studySubject.textContent = data.subject || 'Study';
+            studySubject.style.background = accent.bg;
+            studySubject.style.color = accent.color;
+
+            // Task
+            studyTask.textContent = data.task || '';
+
+            // Reset completion
+            studyComplete.classList.add('hidden');
+            studyProgress.style.width = '0%';
+
+            // Ambient orb color shift
+            orb1.style.background = `radial-gradient(circle, ${accent.orb}, transparent 70%)`;
+            orb1.style.opacity = '0.3';
+            orb2.style.opacity = '0.15';
+
+            // Show study screen
+            idleScreen.classList.add('hidden');
+            studyScreen.classList.remove('hidden');
+
+            startTimer();
+        }
+
+        // ---- Firebase Sync ----
+        function initFirebaseSync() {
+            db.ref('studySession').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.active) {
+                    showStudy(data);
+                } else {
+                    showIdle();
+                }
+            }, (error) => {
+                console.error('[Firebase] Sync failed:', error);
+                statusDot.classList.add('disconnected');
+            });
+
+            // Connection state indicator
+            db.ref('.info/connected').on('value', (snapshot) => {
+                if (snapshot.val() === true) {
+                    statusDot.classList.remove('disconnected');
+                    statusDot.title = 'Connected to Firebase';
+                } else {
+                    statusDot.classList.add('disconnected');
+                    statusDot.title = 'Connecting to Firebase...';
+                }
+            });
+        }
+
+        // ---- WakeLock (prevent screen dimming) ----
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    wakeLock.addEventListener('release', () => {
+                        console.log('[WakeLock] Released');
+                    });
+                    console.log('[WakeLock] Acquired');
+                }
+            } catch (err) {
+                console.warn('[WakeLock] Failed:', err.message);
+            }
+        }
+
+        // Re-acquire wake lock when page becomes visible again
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+
+        // ---- Boot ----
+        updateClock();
+        clockInterval = setInterval(updateClock, 1000);
+        initFirebaseSync();
+        requestWakeLock();
+    </script>
+</body>
+</html>

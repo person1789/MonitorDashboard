@@ -162,6 +162,9 @@ p  { font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
+/* ---- Dropdown Options (native OS popup) ---- */
+select option, select optgroup { color: #000; background: #fff; }
+
 /* ---- Layout-mode FAB ---- */
 .fab-layout {
     position: fixed; bottom: 20px; right: 20px; z-index: 100;
