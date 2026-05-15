@@ -9,12 +9,12 @@ Your iPhone is now a **live, cloud-synced study companion display**. Since we're
 ## Quick Start (3 minutes)
 
 ### Step 1: Open the Dashboard on your PC
-1. Navigate to your live dashboard URL (e.g., `https://person1789.github.io/MonitorDashboard/`).
+1. Navigate to your live dashboard URL: `https://person1789.github.io/MonitorDashboard/dashboard/`
 2. You'll see the minimal focus icon (crosshair) in the bottom-right corner.
 
 ### Step 2: Open the Study Dock on your iPhone
 1. Open **Safari** on your iPhone.
-2. Navigate to: `https://person1789.github.io/MonitorDashboard/phone.html`
+2. Navigate to: `https://person1789.github.io/MonitorDashboard/dashboard/phone.html`
 3. You should see the **Idle Dock** screen with a large clock.
 
 ### Step 3: Add to Home Screen (Fullscreen)
