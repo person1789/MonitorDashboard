@@ -1,0 +1,471 @@
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0
+    }
+
+    .wrap {
+        padding: 1rem 0;
+        font-family: var(--font-sans);
+        color: var(--color-text-primary)
+    }
+
+    .section-title {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin: 1.5rem 0 .75rem
+    }
+
+    .section-title:first-child {
+        margin-top: 0
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 10px;
+        margin-bottom: 1.5rem
+    }
+
+    .card {
+        background: var(--color-background-primary);
+        border: 0.5px solid var(--color-border-tertiary);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem;
+        cursor: pointer;
+        transition: border-color .15s
+    }
+
+    .card:hover {
+        border-color: var(--color-border-primary)
+    }
+
+    .card.active {
+        border: 1.5px solid var(--color-border-info);
+        background: var(--color-background-info)
+    }
+
+    .card-icon {
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: var(--color-text-secondary)
+    }
+
+    .card-title {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px
+    }
+
+    .card-sub {
+        font-size: 12px;
+        color: var(--color-text-secondary);
+        line-height: 1.5
+    }
+
+    .badge {
+        display: inline-block;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        font-weight: 500;
+        margin-bottom: 8px
+    }
+
+    .b-pi {
+        background: var(--color-background-success);
+        color: var(--color-text-success)
+    }
+
+    .b-mon {
+        background: var(--color-background-info);
+        color: var(--color-text-info)
+    }
+
+    .b-both {
+        background: var(--color-background-warning);
+        color: var(--color-text-warning)
+    }
+
+    .b-tools {
+        background: #EEEDFE;
+        color: #3C3489
+    }
+
+    .detail {
+        background: var(--color-background-secondary);
+        border-radius: var(--border-radius-lg);
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        min-height: 120px
+    }
+
+    .detail h3 {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: .5rem
+    }
+
+    .detail p {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        margin-bottom: .5rem
+    }
+
+    .detail ul {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        padding-left: 1.2rem
+    }
+
+    .detail .tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: .75rem
+    }
+
+    .tag {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        border: 0.5px solid var(--color-border-secondary);
+        color: var(--color-text-secondary)
+    }
+
+    .layout-svg-wrap {
+        background: var(--color-background-secondary);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem;
+        margin-bottom: 1.5rem
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 5px 12px;
+        border-radius: var(--border-radius-md);
+        border: 0.5px solid var(--color-border-secondary);
+        background: transparent;
+        color: var(--color-text-primary);
+        cursor: pointer;
+        margin-right: 6px;
+        margin-bottom: 6px
+    }
+
+    .btn:hover {
+        background: var(--color-background-secondary)
+    }
+
+    .btn.active-btn {
+        background: var(--color-background-info);
+        border-color: var(--color-border-info);
+        color: var(--color-text-info)
+    }
+</style>
+
+<h2 class="sr-only">Desk setup plan for Samsung monitor, PC, Raspberry Pi 3, and robotics tools</h2>
+<div class="wrap">
+
+    <div class="section-title">Desk layout — click a zone to explore</div>
+    <div class="layout-svg-wrap">
+        <svg width="100%" viewBox="0 0 640 230" role="img">
+            <title>Top-down desk layout showing monitor, PC, Raspberry Pi 3, and tools zones</title>
+            <desc>A top-down desk diagram with four labeled zones: Samsung monitor connected by HDMI, main PC at
+                center-left, Raspberry Pi 3 at center-right, and robotics tools zone at far right</desc>
+            <defs>
+                <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5"
+                    orient="auto-start-reverse">
+                    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </marker>
+            </defs>
+
+            <!-- Desk surface -->
+            <rect x="20" y="30" width="600" height="180" rx="12" fill="none" stroke="var(--color-border-secondary)"
+                stroke-width="1" stroke-dasharray="4 3" />
+            <text x="310" y="22" text-anchor="middle" font-size="11" fill="var(--color-text-tertiary)"
+                font-family="var(--font-sans)">desk surface</text>
+
+            <!-- Monitor (top center) -->
+            <rect id="z-mon" x="190" y="42" width="180" height="80" rx="8" fill="var(--color-background-info)"
+                stroke="#185FA5" stroke-width="0.5" style="cursor:pointer" onclick="showZone('monitor')" />
+            <text x="280" y="80" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C"
+                font-family="var(--font-sans)">Samsung monitor</text>
+            <text x="280" y="96" text-anchor="middle" font-size="11" fill="#185FA5" font-family="var(--font-sans)">HDMI
+                + VGA</text>
+            <!-- Monitor stand -->
+            <rect x="266" y="122" width="28" height="8" rx="2" fill="var(--color-border-secondary)" />
+            <rect x="256" y="128" width="48" height="4" rx="2" fill="var(--color-border-secondary)" />
+
+            <!-- PC tower -->
+            <rect id="z-pc" x="42" y="58" width="110" height="130" rx="8" fill="var(--color-background-secondary)"
+                stroke="var(--color-border-primary)" stroke-width="0.5" style="cursor:pointer"
+                onclick="showZone('pc')" />
+            <text x="97" y="108" text-anchor="middle" font-size="13" font-weight="500" fill="var(--color-text-primary)"
+                font-family="var(--font-sans)">Main PC</text>
+            <text x="97" y="124" text-anchor="middle" font-size="11" fill="var(--color-text-secondary)"
+                font-family="var(--font-sans)">study + code</text>
+            <rect x="64" y="148" width="66" height="28" rx="4" fill="var(--color-border-tertiary)" />
+            <text x="97" y="166" text-anchor="middle" font-size="10" fill="var(--color-text-tertiary)"
+                font-family="var(--font-sans)">HDMI→monitor</text>
+
+            <!-- Raspberry Pi -->
+            <rect id="z-pi" x="400" y="75" width="120" height="95" rx="8" fill="#E1F5EE" stroke="#0F6E56"
+                stroke-width="0.5" style="cursor:pointer" onclick="showZone('pi')" />
+            <text x="460" y="115" text-anchor="middle" font-size="13" font-weight="500" fill="#085041"
+                font-family="var(--font-sans)">Raspberry Pi 3</text>
+            <text x="460" y="131" text-anchor="middle" font-size="11" fill="#0F6E56"
+                font-family="var(--font-sans)">server + lab</text>
+            <rect x="420" y="148" width="80" height="14" rx="3" fill="#9FE1CB" opacity=".5" />
+            <text x="460" y="159" text-anchor="middle" font-size="10" fill="#085041"
+                font-family="var(--font-sans)">VGA→monitor</text>
+
+            <!-- Robotics tools -->
+            <rect id="z-tools" x="544" y="52" width="72" height="148" rx="8" fill="#EEEDFE" stroke="#534AB7"
+                stroke-width="0.5" style="cursor:pointer" onclick="showZone('tools')" />
+            <text x="580" y="122" text-anchor="middle" font-size="12" font-weight="500" fill="#3C3489"
+                font-family="var(--font-sans)">Tools</text>
+            <text x="580" y="138" text-anchor="middle" font-size="10" fill="#534AB7"
+                font-family="var(--font-sans)">robotics</text>
+            <text x="580" y="152" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">ECE
+                gear</text>
+
+            <!-- Connections -->
+            <line x1="152" y1="100" x2="190" y2="100" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="3 2"
+                marker-end="url(#arr2)" fill="none" />
+            <text x="171" y="94" text-anchor="middle" font-size="10" fill="#185FA5"
+                font-family="var(--font-sans)">HDMI</text>
+
+            <line x1="400" y1="120" x2="373" y2="120" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="3 2"
+                marker-end="url(#arr2)" fill="none" />
+            <text x="386" y="113" text-anchor="middle" font-size="10" fill="#0F6E56"
+                font-family="var(--font-sans)">VGA</text>
+
+            <line x1="460" y1="75" x2="380" y2="58" stroke="#BA7517" stroke-width="1" stroke-dasharray="2 2"
+                fill="none" />
+            <text x="420" y="58" text-anchor="middle" font-size="10" fill="#BA7517" font-family="var(--font-sans)">SSH /
+                USB</text>
+        </svg>
+    </div>
+
+    <div class="section-title">Click a device or project idea below</div>
+    <div class="cards" id="cards">
+
+        <div class="card" onclick="showZone('monitor')">
+            <div class="card-icon"><i class="ti ti-device-desktop" aria-hidden="true"></i></div>
+            <span class="badge b-mon">Monitor</span>
+            <div class="card-title">Dual-source display</div>
+            <div class="card-sub">PC on HDMI, Pi on VGA — switch inputs to flip between workstations</div>
+        </div>
+
+        <div class="card" onclick="showZone('pi_os')">
+            <div class="card-icon"><i class="ti ti-server" aria-hidden="true"></i></div>
+            <span class="badge b-pi">Pi 3</span>
+            <div class="card-title">Headless Linux server</div>
+            <div class="card-sub">Run Raspberry Pi OS Lite, SSH in from PC, learn Linux commands daily</div>
+        </div>
+
+        <div class="card" onclick="showZone('pi_code')">
+            <div class="card-icon"><i class="ti ti-terminal-2" aria-hidden="true"></i></div>
+            <span class="badge b-pi">Pi 3</span>
+            <div class="card-title">C++ / Python lab machine</div>
+            <div class="card-sub">Compile and run your ECE and physics simulations on real hardware</div>
+        </div>
+
+        <div class="card" onclick="showZone('pi_robot')">
+            <div class="card-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
+            <span class="badge b-pi">Pi 3</span>
+            <div class="card-title">Robotics controller</div>
+            <div class="card-sub">GPIO pins drive motors, servos, sensors — live robotics testbed</div>
+        </div>
+
+        <div class="card" onclick="showZone('pi_monitor_use')">
+            <div class="card-icon"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+            <span class="badge b-both">Pi + Monitor</span>
+            <div class="card-title">Live data dashboard</div>
+            <div class="card-sub">Pi streams sensor/system data to monitor — always-on physics readout</div>
+        </div>
+
+        <div class="card" onclick="showZone('pc_setup')">
+            <div class="card-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
+            <span class="badge b-mon">PC</span>
+            <div class="card-title">Dev environment</div>
+            <div class="card-sub">VS Code, Git, Python, C++ compiler — your main workstation setup</div>
+        </div>
+
+        <div class="card" onclick="showZone('tools_zone')">
+            <div class="card-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
+            <span class="badge b-tools">Tools</span>
+            <div class="card-title">ECE workbench zone</div>
+            <div class="card-sub">Multimeter, breadboard, jumper wires, component tray — always within reach</div>
+        </div>
+
+        <div class="card" onclick="showZone('research')">
+            <div class="card-icon"><i class="ti ti-flask" aria-hidden="true"></i></div>
+            <span class="badge b-both">All</span>
+            <div class="card-title">Research-track projects</div>
+            <div class="card-sub">Real projects that impress OSU professors when you email them</div>
+        </div>
+
+    </div>
+
+    <div class="section-title">Details</div>
+    <div class="detail" id="detail">
+        <h3>Select a zone or idea above</h3>
+        <p>Click any card or the desk diagram to see setup instructions, software to install, and project ideas.</p>
+    </div>
+
+    <div class="section-title">Quick actions</div>
+    <div>
+        <button class="btn"
+            onclick="sendPrompt('Give me a step-by-step guide to setting up Raspberry Pi OS headless with SSH on Pi 3')">Pi
+            headless setup guide ↗</button>
+        <button class="btn"
+            onclick="sendPrompt('What GPIO projects can I do with Raspberry Pi 3 for robotics and ECE?')">Pi GPIO
+            project ideas ↗</button>
+        <button class="btn" onclick="sendPrompt('How do I connect Raspberry Pi 3 to a monitor via VGA?')">Pi to VGA
+            adapter info ↗</button>
+        <button class="btn"
+            onclick="sendPrompt('What should I install on my PC for C++ and Python development for ECE and physics?')">PC
+            dev environment setup ↗</button>
+        <button class="btn"
+            onclick="sendPrompt('Give me 5 beginner robotics projects I can build with a Raspberry Pi 3 and basic components')">Robotics
+            project list ↗</button>
+        <button class="btn"
+            onclick="sendPrompt('How do I build a live sensor dashboard on Raspberry Pi that displays on a monitor?')">Build
+            a Pi dashboard ↗</button>
+    </div>
+
+</div>
+
+<script>
+    const details = {
+        monitor: {
+            title: "Samsung monitor — dual input strategy",
+            badge: "b-mon",
+            badgeText: "Monitor",
+            body: `<p>Your monitor has <strong>HDMI</strong> and <strong>VGA</strong> — that's the key. Connect your <strong>PC via HDMI</strong> (crisp, full resolution) and your <strong>Raspberry Pi via VGA</strong> (needs a micro-HDMI to VGA adapter, ~$8). Use the monitor's input select button to flip between them instantly — two full workstations, one screen.</p>
+    <ul>
+      <li>PC on HDMI: your main coding, study, and writing workstation</li>
+      <li>Pi on VGA: robotics terminal, Linux practice, sensor dashboards</li>
+      <li>No KVM switch needed — just press the input button</li>
+    </ul>`,
+            tags: ["HDMI", "VGA adapter needed", "input select button", "dual workstation"]
+        },
+        pi_os: {
+            title: "Raspberry Pi 3 — headless Linux server",
+            badge: "b-pi",
+            badgeText: "Pi 3",
+            body: `<p>Flash <strong>Raspberry Pi OS Lite</strong> (no desktop — lighter, faster) to a microSD card, enable SSH in the imager, connect Pi to your router via ethernet. SSH in from your PC: <code>ssh pi@raspberrypi.local</code>. This is exactly how research clusters work — learn it now.</p>
+    <ul>
+      <li>Install: git, python3, gcc, g++, vim/nano, htop, tmux</li>
+      <li>Practice Linux commands daily: chmod, grep, pipe, cron, systemd</li>
+      <li>Run long Python simulations remotely (ODE solver, Fourier plotter)</li>
+      <li>Host a local file server or web dashboard with Flask</li>
+    </ul>`,
+            tags: ["Raspberry Pi OS Lite", "SSH", "ethernet", "Linux CLI", "tmux"]
+        },
+        pi_code: {
+            title: "Pi 3 as a C++ / Python lab machine",
+            badge: "b-pi",
+            badgeText: "Pi 3",
+            body: `<p>The Pi runs real ARM Linux — your C++ and Python code compiles and runs natively. Write code on your PC, push via Git or scp, compile on the Pi. This mimics the workflow of a university HPC cluster or a research lab server exactly.</p>
+    <ul>
+      <li>Install g++, cmake, python3-numpy, python3-scipy, python3-matplotlib</li>
+      <li>Run your ODE solver and Fourier programs — test on real hardware</li>
+      <li>Write a C++ physics sim → compile on Pi → log output to CSV → plot on PC</li>
+      <li>Practice: Makefile, gdb debugger, valgrind memory checking</li>
+    </ul>`,
+            tags: ["g++", "cmake", "numpy on ARM", "scp workflow", "Makefile"]
+        },
+        pi_robot: {
+            title: "Pi 3 as a robotics controller",
+            badge: "b-pi",
+            badgeText: "Pi 3",
+            body: `<p>The Pi 3 has 40 GPIO pins — you can directly control motors, read sensors, and drive servos. This is your ECE hardware lab at home, directly relevant to OSU's ECE2560 and robotics track.</p>
+    <ul>
+      <li>Control an LED → then a servo motor → then a DC motor with L298N driver</li>
+      <li>Read sensors: HC-SR04 ultrasonic (distance), DHT22 (temp/humidity), MPU6050 (IMU)</li>
+      <li>Build: autonomous obstacle avoidance car, robotic arm joint, line follower</li>
+      <li>Language: Python with RPi.GPIO or gpiozero library — easy to start</li>
+      <li>Later: write the motor control in C++ for speed</li>
+    </ul>`,
+            tags: ["GPIO", "RPi.GPIO", "L298N", "servo", "HC-SR04", "MPU6050"]
+        },
+        pi_monitor_use: {
+            title: "Pi + Monitor — live data dashboard",
+            badge: "b-both",
+            badgeText: "Pi + Monitor",
+            body: `<p>Connect Pi to the monitor via VGA and run a fullscreen dashboard — this is the most impressive thing to show a professor. Real-time sensor data, physics simulations, or system stats displayed on a dedicated screen.</p>
+    <ul>
+      <li>Flask + matplotlib: stream sensor plots to a browser on the monitor</li>
+      <li>Display: live ODE simulation output, FFT of a microphone signal, temperature over time</li>
+      <li>Use a cron job to auto-start the dashboard on boot</li>
+      <li>Advanced: build a Grafana + InfluxDB stack for real-time time-series data</li>
+      <li>Show it off: "here's my home sensor dashboard" = instant credibility with research profs</li>
+    </ul>`,
+            tags: ["Flask", "matplotlib", "Grafana", "InfluxDB", "sensor streaming", "autostart"]
+        },
+        pc_setup: {
+            title: "PC — development environment",
+            badge: "b-mon",
+            badgeText: "PC",
+            body: `<p>Your PC is the main workhorse — heavy coding, LaTeX, large simulations, and Zoom calls with professors. Set it up properly now so you're not configuring tools when classes start.</p>
+    <ul>
+      <li>Install: VS Code, Git, Python 3.12+, g++/MinGW (Windows) or native (Linux)</li>
+      <li>Python packages: numpy, scipy, matplotlib, sympy, pandas — install via pip or conda</li>
+      <li>VS Code extensions: C/C++, Python, LaTeX Workshop, GitLens, Remote-SSH</li>
+      <li>Remote-SSH extension: code on Pi from VS Code on PC — best of both worlds</li>
+      <li>Set up GitHub: push every project from day 1 — your portfolio for professors</li>
+    </ul>`,
+            tags: ["VS Code", "Remote-SSH", "GitHub", "conda", "LaTeX Workshop"]
+        },
+        tools_zone: {
+            title: "ECE tools — workbench zone",
+            badge: "b-tools",
+            badgeText: "Tools",
+            body: `<p>Keep your electronics tools in a dedicated right-side zone so you can grab a multimeter mid-session without disrupting your coding flow. Organization = speed.</p>
+    <ul>
+      <li>Essential: breadboard, jumper wires (M-M, M-F, F-F), multimeter</li>
+      <li>Components tray: resistors, capacitors, LEDs, transistors (NPN/PNP), diodes</li>
+      <li>Nice to have: oscilloscope (Rigol DS1054Z ~$300 or a cheap USB scope)</li>
+      <li>For Pi GPIO: logic level converter (3.3V Pi ↔ 5V components), MOSFET driver</li>
+      <li>Label everything — component bins with sticky labels saves hours</li>
+    </ul>`,
+            tags: ["breadboard", "multimeter", "jumper wires", "component tray", "oscilloscope"]
+        },
+        research: {
+            title: "Research-track projects — professor bait",
+            badge: "b-both",
+            badgeText: "All devices",
+            body: `<p>These are the projects that make a professor say yes to taking you into their lab as a freshman. Each one uses your monitor, Pi, and PC together and maps directly to a research skill.</p>
+    <ul>
+      <li><strong>EM field visualizer</strong>: Python on PC, plots on monitor — mention this in emails to physics profs</li>
+      <li><strong>IMU data logger</strong>: MPU6050 on Pi → log accelerometer data → plot FFT on PC → characterize vibrations</li>
+      <li><strong>PID controller</strong>: Pi drives a motor, reads encoder, runs a real PID loop — control systems research</li>
+      <li><strong>ODE solver benchmark</strong>: run your C++ RK4 solver on both PC and Pi, compare compute times, write it up</li>
+      <li><strong>Signal processing demo</strong>: microphone → Pi ADC → FFT → display on monitor — shows ECE2100 prereq knowledge</li>
+    </ul>`,
+            tags: ["IMU", "PID control", "FFT", "EM visualization", "RK4 benchmark", "research portfolio"]
+        }
+    };
+
+    function showZone(key) {
+        const d = details[key];
+        if (!d) return;
+        const det = document.getElementById('detail');
+        det.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+    <span class="badge ${d.badge}" style="margin:0">${d.badgeText}</span>
+    <h3 style="margin:0">${d.title}</h3>
+  </div>
+  ${d.body}
+  <div class="tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`;
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    }
+</script>

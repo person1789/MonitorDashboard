@@ -1,0 +1,31 @@
+{
+    "projects": [
+        { "id": "p1",  "name": "Vector Visualizer",         "language": "Python", "category": "Math",     "description": "2D/3D vector operations and transformations visualizer" },
+        { "id": "p2",  "name": "Matrix Calculator",         "language": "Python", "category": "Math",     "description": "Matrix operations, determinants, eigenvalues from scratch" },
+        { "id": "p3",  "name": "ODE Solver Suite",          "language": "Python", "category": "Math",     "description": "Euler, RK4, and adaptive solvers for differential equations" },
+        { "id": "p4",  "name": "Fourier Series Plotter",    "language": "Python", "category": "Math",     "description": "Compute and plot Fourier series for various waveforms" },
+        { "id": "p5",  "name": "EM Field Visualizer",       "language": "Python", "category": "Physics",  "description": "Electric and magnetic field line plotter for charge configs" },
+        { "id": "p6",  "name": "Projectile Simulator",      "language": "Python", "category": "Physics",  "description": "Classical mechanics projectile with drag and wind" },
+        { "id": "p7",  "name": "Lagrangian Solver",         "language": "Python", "category": "Physics",  "description": "Derive equations of motion from Lagrangian formulation" },
+        { "id": "p8",  "name": "QM Wavefunction Plotter",   "language": "Python", "category": "Physics",  "description": "1D quantum well wavefunctions and probability densities" },
+        { "id": "p9",  "name": "RK4 Solver (C++)",          "language": "C++",    "category": "Math",     "description": "High-performance ODE solver with Makefile build system" },
+        { "id": "p10", "name": "Matrix Library (C++)",      "language": "C++",    "category": "Math",     "description": "Templated matrix class with operators and decompositions" },
+        { "id": "p11", "name": "Circuit Analyzer",          "language": "Python", "category": "ECE",      "description": "Resistor network solver using Kirchhoff's laws" },
+        { "id": "p12", "name": "AC Circuit Simulator",      "language": "Python", "category": "ECE",      "description": "Impedance, phasors, and frequency response plots" },
+        { "id": "p13", "name": "Digital Logic Simulator",   "language": "Python", "category": "ECE",      "description": "AND, OR, NOT gates to build adders and flip-flops" },
+        { "id": "p14", "name": "Signal Processing Demo",    "language": "Python", "category": "ECE",      "description": "FFT, filtering, and spectral analysis of signals" },
+        { "id": "p15", "name": "PID Controller",            "language": "Both",   "category": "ECE",      "description": "PID loop simulation and tuning with live plots" },
+        { "id": "p16", "name": "GPIO LED Controller",       "language": "Python", "category": "ECE",      "description": "Raspberry Pi GPIO: control LEDs, read buttons" },
+        { "id": "p17", "name": "IMU Data Logger",           "language": "Python", "category": "ECE",      "description": "MPU6050 accelerometer data capture and FFT analysis" },
+        { "id": "p18", "name": "Stats Data Analyzer",       "language": "Python", "category": "Math",     "description": "Descriptive stats, distributions, hypothesis testing" },
+        { "id": "p19", "name": "Error Propagation Calc",    "language": "Python", "category": "Math",     "description": "Multi-variable error propagation calculator" },
+        { "id": "p20", "name": "CLT Simulator",             "language": "Python", "category": "Math",     "description": "Central Limit Theorem visual demonstration" },
+        { "id": "p21", "name": "LaTeX Paper Scaffold",      "language": "Python", "category": "Research", "description": "Script to generate LaTeX paper templates with BibTeX" },
+        { "id": "p22", "name": "Git Workflow Practice",     "language": "Both",   "category": "Research", "description": "Branching, merging, rebasing, and PR workflow" },
+        { "id": "p23", "name": "Physics Sim Dashboard",     "language": "Both",   "category": "Research", "description": "Flask dashboard streaming simulation data to monitor" },
+        { "id": "p24", "name": "ODE Benchmark Suite",       "language": "Both",   "category": "Research", "description": "Compare Python vs C++ solver performance" },
+        { "id": "p25", "name": "Thermodynamics Toolkit",    "language": "Python", "category": "Physics",  "description": "Ideal gas, Carnot cycle, entropy calculations" },
+        { "id": "p26", "name": "Eigenvalue Visualizer",     "language": "Python", "category": "Math",     "description": "Interactive eigenvector/eigenvalue transformation demo" },
+        { "id": "p27", "name": "EM Wave Simulator",         "language": "Python", "category": "Physics",  "description": "Interactive electromagnetic wave propagation" }
+    ]
+}

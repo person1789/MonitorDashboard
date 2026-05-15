@@ -1,0 +1,27 @@
+{
+    "professors": [
+        { "name": "(Professor 1)", "lab": "Condensed Matter Lab", "email": "", "status": "Not Contacted", "area": "Condensed matter physics" },
+        { "name": "(Professor 2)", "lab": "Quantum Devices Lab", "email": "", "status": "Not Contacted", "area": "Quantum device engineering" },
+        { "name": "(Professor 3)", "lab": "Materials Science", "email": "", "status": "Not Contacted", "area": "Thin film characterization" }
+    ],
+    "skills": [
+        { "name": "Python (NumPy/SciPy)", "current": 3, "goal": 8 },
+        { "name": "C++ Programming",       "current": 1, "goal": 6 },
+        { "name": "Git Version Control",   "current": 4, "goal": 8 },
+        { "name": "LaTeX Typesetting",     "current": 2, "goal": 7 },
+        { "name": "Linux CLI",             "current": 3, "goal": 7 },
+        { "name": "Lab Protocols",         "current": 1, "goal": 5 },
+        { "name": "Paper Reading",         "current": 2, "goal": 6 },
+        { "name": "Error Analysis",        "current": 1, "goal": 6 },
+        { "name": "Makefiles",             "current": 0, "goal": 5 },
+        { "name": "Unit Testing",          "current": 1, "goal": 5 }
+    ],
+    "reading": [
+        { "title": "Griffiths — Electrodynamics", "status": "Not Started" },
+        { "title": "Griffiths — Quantum Mechanics", "status": "Not Started" },
+        { "title": "Morin — Classical Mechanics", "status": "Not Started" },
+        { "title": "OpenIntro Statistics", "status": "Not Started" },
+        { "title": "Taylor — Error Analysis", "status": "Not Started" },
+        { "title": "Pro Git (free)", "status": "Reading" }
+    ]
+}
