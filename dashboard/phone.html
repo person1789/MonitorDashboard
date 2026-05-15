@@ -84,13 +84,9 @@
 
         /* ---- Idle Dock Screen ---- */
         .idle-content {
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 12px; width: 100%;
-        }
-        .idle-top-row {
-            display: flex; align-items: baseline; justify-content: center;
-            gap: 40px; width: 100%;
+            display: flex; flex-direction: row;
+            align-items: baseline; justify-content: center;
+            gap: 36px; width: 100%;
         }
         .idle-time {
             font-size: 3.8rem;
@@ -108,14 +104,8 @@
             color: var(--text-tertiary);
         }
         .idle-day-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 20px;
-            background: rgba(96,165,250,0.1);
-            border: 1px solid rgba(96,165,250,0.2);
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent-physics);
+            font-size: 1rem;
+            color: var(--text-secondary);
         }
         .idle-day-badge .day-num {
             font-size: 1.2rem;
@@ -123,10 +113,10 @@
             letter-spacing: -0.02em;
         }
         .idle-hint {
-            font-size: 0.7rem;
+            position: absolute; bottom: 30px;
+            font-size: 0.8rem;
             color: var(--text-tertiary);
             animation: pulse 2.5s ease-in-out infinite;
-            margin-top: 8px;
         }
         @keyframes pulse {
             0%, 100% { opacity: 0.3; }
@@ -211,16 +201,14 @@
     <!-- Idle Dock Screen -->
     <div class="screen" id="idle-screen">
         <div class="idle-content">
-            <div class="idle-top-row">
-                <div class="idle-time" id="idle-time"></div>
-                <div class="idle-date" id="idle-date"></div>
-                <div class="idle-weather" id="idle-weather"></div>
-            </div>
+            <div class="idle-time" id="idle-time"></div>
+            <div class="idle-date" id="idle-date"></div>
             <div class="idle-day-badge" id="idle-day-badge">
-                🎯 <span class="day-num" id="idle-day-num">—</span> of 90
+                Day <span class="day-num" id="idle-day-num">—</span> of 90
             </div>
-            <div class="idle-hint">Dock ready — start a session from dashboard</div>
+            <div class="idle-weather" id="idle-weather"></div>
         </div>
+        <div class="idle-hint">Dock ready — start a session from dashboard</div>
     </div>
 
     <!-- Active Study Screen -->

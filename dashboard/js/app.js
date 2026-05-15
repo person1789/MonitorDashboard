@@ -319,9 +319,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let db = null;
-if (window.firebase) {
+try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
+    console.log('[Firebase] Initialized successfully');
+} catch (e) {
+    console.error('[Firebase] Initialization failed:', e);
 }
 
 let focusActive = false;
@@ -357,7 +360,7 @@ function wireFocusMode() {
 
     // Close popover when clicking outside
     document.addEventListener('click', (e) => {
-        if (!popover.contains(e.target) && e.target !== focusFab) {
+        if (!popover.contains(e.target) && !focusFab.contains(e.target)) {
             popover.classList.remove('visible');
         }
     });
