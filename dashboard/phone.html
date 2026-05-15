@@ -369,8 +369,10 @@
 
         // ---- Firebase Sync ----
         function initFirebaseSync() {
+            console.log('[Phone] Initializing Firebase sync...');
             db.ref('studySession').on('value', (snapshot) => {
                 const data = snapshot.val();
+                console.log('[Phone] Received Firebase data:', data);
                 if (data && data.active) {
                     showStudy(data);
                 } else {

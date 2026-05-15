@@ -323,6 +323,12 @@ try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     console.log('[Firebase] Initialized successfully');
+
+    // TEMP DEBUG — remove after confirming it works
+    db.ref('studySession').once('value')
+        .then(snap => console.log('[Firebase] Read test OK:', snap.val()))
+        .catch(err => console.error('[Firebase] Read test FAILED:', err));
+
 } catch (e) {
     console.error('[Firebase] Initialization failed:', e);
 }
@@ -340,7 +346,6 @@ function wireFocusMode() {
 
     if (!focusFab) return;
 
-    // Duration buttons
     durBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             durBtns.forEach(b => b.classList.remove('selected'));
@@ -349,8 +354,8 @@ function wireFocusMode() {
         });
     });
 
-    // Toggle popover
-    focusFab.addEventListener('click', () => {
+    focusFab.addEventListener('click', (e) => {
+        e.stopPropagation();          // ← KEY FIX: stops the document listener below
         if (focusActive) {
             endFocusSession();
         } else {
@@ -358,14 +363,15 @@ function wireFocusMode() {
         }
     });
 
-    // Close popover when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!popover.contains(e.target) && !focusFab.contains(e.target)) {
-            popover.classList.remove('visible');
-        }
-    });
+    // Use setTimeout so this listener fires AFTER the FAB click fully propagates
+    setTimeout(() => {
+        document.addEventListener('click', (e) => {
+            if (!popover.contains(e.target) && !focusFab.contains(e.target)) {
+                popover.classList.remove('visible');
+            }
+        });
+    }, 0);
 
-    // Start session
     startBtn.addEventListener('click', () => {
         const subject = subjectSelect.value;
         const task = taskInput.value.trim();
@@ -375,8 +381,11 @@ function wireFocusMode() {
 }
 
 async function startFocusSession(subject, task, minutes) {
-    if (!db) return;
-    
+    if (!db) {
+        alert('Firebase not initialized. Check your config.');
+        return;
+    }
+
     const sessionData = {
         active: true,
         subject: subject || 'General',
@@ -388,8 +397,10 @@ async function startFocusSession(subject, task, minutes) {
 
     try {
         await db.ref('studySession').set(sessionData);
+        console.log('[Focus] Session started successfully:', sessionData);
     } catch (err) {
-        console.error('[Focus] Firebase error:', err);
+        console.error('[Focus] Firebase write failed:', err);
+        alert(`Firebase error: ${err.message}\n\nCheck the Rules tab at console.firebase.google.com`);
     }
 }
 
