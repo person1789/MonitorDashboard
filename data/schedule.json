@@ -1,0 +1,36 @@
+{
+    "semester": "Y1 Autumn — Triple Major Track",
+    "blocks": [
+        { "day": "Monday", "startTime": "07:00", "endTime": "08:30", "name": "Deep Theory Study", "subject": "Physics", "location": "Home" },
+        { "day": "Monday", "startTime": "08:30", "endTime": "09:15", "name": "Problem Set Work", "subject": "Math", "location": "Home" },
+        { "day": "Monday", "startTime": "09:30", "endTime": "11:00", "name": "Coding / ECE Work", "subject": "Coding", "location": "Home" },
+        { "day": "Monday", "startTime": "14:00", "endTime": "14:45", "name": "Anki + Review", "subject": "General", "location": "Home" },
+        { "day": "Monday", "startTime": "20:00", "endTime": "21:00", "name": "Light Reading / 3B1B", "subject": "General", "location": "Home" },
+        
+        { "day": "Tuesday", "startTime": "07:00", "endTime": "08:30", "name": "Deep Theory Study", "subject": "Physics", "location": "Home" },
+        { "day": "Tuesday", "startTime": "08:30", "endTime": "09:15", "name": "Problem Set Work", "subject": "Math", "location": "Home" },
+        { "day": "Tuesday", "startTime": "09:30", "endTime": "11:00", "name": "Coding / ECE Work", "subject": "Coding", "location": "Home" },
+        { "day": "Tuesday", "startTime": "14:00", "endTime": "14:45", "name": "Anki + Review", "subject": "General", "location": "Home" },
+        { "day": "Tuesday", "startTime": "20:00", "endTime": "21:00", "name": "Light Reading / 3B1B", "subject": "General", "location": "Home" },
+
+        { "day": "Wednesday", "startTime": "07:00", "endTime": "08:30", "name": "Deep Theory Study", "subject": "Physics", "location": "Home" },
+        { "day": "Wednesday", "startTime": "08:30", "endTime": "09:15", "name": "Problem Set Work", "subject": "Math", "location": "Home" },
+        { "day": "Wednesday", "startTime": "09:30", "endTime": "11:00", "name": "Coding / ECE Work", "subject": "Coding", "location": "Home" },
+        { "day": "Wednesday", "startTime": "14:00", "endTime": "14:45", "name": "Anki + Review", "subject": "General", "location": "Home" },
+        { "day": "Wednesday", "startTime": "20:00", "endTime": "21:00", "name": "Light Reading / 3B1B", "subject": "General", "location": "Home" },
+
+        { "day": "Thursday", "startTime": "07:00", "endTime": "08:30", "name": "Deep Theory Study", "subject": "Physics", "location": "Home" },
+        { "day": "Thursday", "startTime": "08:30", "endTime": "09:15", "name": "Problem Set Work", "subject": "Math", "location": "Home" },
+        { "day": "Thursday", "startTime": "09:30", "endTime": "11:00", "name": "Coding / ECE Work", "subject": "Coding", "location": "Home" },
+        { "day": "Thursday", "startTime": "14:00", "endTime": "14:45", "name": "Anki + Review", "subject": "General", "location": "Home" },
+        { "day": "Thursday", "startTime": "20:00", "endTime": "21:00", "name": "Light Reading / 3B1B", "subject": "General", "location": "Home" },
+
+        { "day": "Friday", "startTime": "07:00", "endTime": "08:30", "name": "Deep Theory Study", "subject": "Physics", "location": "Home" },
+        { "day": "Friday", "startTime": "08:30", "endTime": "09:15", "name": "Problem Set Work", "subject": "Math", "location": "Home" },
+        { "day": "Friday", "startTime": "09:30", "endTime": "11:00", "name": "Coding / ECE Work", "subject": "Coding", "location": "Home" },
+        { "day": "Friday", "startTime": "14:00", "endTime": "14:45", "name": "Anki + Review", "subject": "General", "location": "Home" },
+        { "day": "Friday", "startTime": "20:00", "endTime": "21:00", "name": "Light Reading / 3B1B", "subject": "General", "location": "Home" },
+
+        { "day": "Sunday", "startTime": "10:00", "endTime": "16:00", "name": "Weekly Review + Mock Exam", "subject": "Math", "location": "Library" }
+    ]
+}

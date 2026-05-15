@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#080816">
+    <title>Study Dock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDKs — REQUIRED, were missing before -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --text-primary: rgba(255, 255, 255, 0.92);
+            --text-secondary: rgba(255, 255, 255, 0.52);
+            --text-tertiary: rgba(255, 255, 255, 0.28);
+            --accent-physics: #60A5FA;
+            --accent-math: #34D399;
+            --accent-ece: #A78BFA;
+            --accent-latin: #FBBF24;
+            --accent-coding: #F472B6;
+            --accent-general: #94A3B8;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #080816;
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(135deg, #080816 0%, #0c1025 30%, #0a1628 60%, #080816 100%);
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            transition: background 2s ease;
+        }
+
+        .bg-orb--1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #1e40af, transparent 70%);
+            top: -30%;
+            left: -10%;
+            animation: drift1 20s ease-in-out infinite alternate;
+        }
+
+        .bg-orb--2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #5b21b6, transparent 70%);
+            bottom: -20%;
+            right: -5%;
+            animation: drift2 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift1 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(80px, 60px) scale(1.1);
+            }
+        }
+
+        @keyframes drift2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(-60px, -40px) scale(1.15);
+            }
+        }
+
+        .screen {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+        }
+
+        /* Idle */
+        .idle-content {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            width: 100%; max-width: 900px;
+            gap: 40px;
+        }
+
+        .idle-top-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            align-items: baseline;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .idle-time {
+            font-size: 3.2rem;
+            font-weight: 200;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        .idle-date {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .idle-weather {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-align: right;
+            display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+        }
+
+        .idle-day-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 9999px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+        }
+
+        .idle-day-badge .day-num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .idle-hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            animation: blink 2.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Active study */
+        .study-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .study-subject {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 16px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .study-timer {
+            font-size: 5.5rem;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .study-task {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .study-progress-wrap {
+            width: 100%;
+            max-width: 400px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .study-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s linear;
+        }
+
+        .study-complete {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-math);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        /* Debug overlay */
+        #debug-overlay {
+            position: fixed;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #aaa;
+            line-height: 1.6;
+            max-height: 160px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #debug-overlay.visible {
+            display: block;
+        }
+
+        #debug-toggle {
+            position: fixed;
+            top: 8px;
+            right: 8px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        .status-dot {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            z-index: 10;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34D399;
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+            transition: background 0.3s;
+        }
+
+        .status-dot.disconnected {
+            background: #FB923C;
+            box-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg">
+        <div class="bg-orb bg-orb--1" id="orb1"></div>
+        <div class="bg-orb bg-orb--2" id="orb2"></div>
+    </div>
+
+    <button id="debug-toggle" onclick="toggleDebug()">debug</button>
+    <div id="debug-overlay"></div>
+
+    <div class="status-dot disconnected" id="status-dot"></div>
+
+    <!-- Idle Dock Screen -->
+    <div class="screen" id="idle-screen">
+        <div class="idle-content">
+            <div class="idle-top-row">
+                <div class="idle-time" id="idle-time"></div>
+                <div class="idle-date" id="idle-date"></div>
+                <div class="idle-weather" id="idle-weather">73°F ☀️</div>
+            </div>
+            
+            <div class="idle-day-badge" id="idle-day-badge">
+                Day <span class="day-num" id="idle-day-num">—</span> of 90
+            </div>
+
+            <div class="idle-hint">Dock ready. Start a session from dashboard.</div>
+        </div>
+    </div>
+
+    <!-- Active study screen -->
+    <div class="screen hidden" id="study-screen">
+        <div class="study-content">
+            <div class="study-subject" id="study-subject">Physics</div>
+            <div class="study-timer" id="study-timer">25:00</div>
+            <div class="study-task" id="study-task"></div>
+            <div class="study-progress-wrap">
+                <div class="study-progress-bar" id="study-progress" style="width:0%"></div>
+            </div>
+            <div class="study-complete hidden" id="study-complete">Session Complete</div>
+        </div>
+    </div>
+
+    <script>
+        // ---- Debug logger ----
+        const debugEl = document.getElementById('debug-overlay');
+        function dbg(msg, color) {
+            const line = document.createElement('div');
+            line.style.color = color || '#aaa';
+            line.textContent = new Date().toLocaleTimeString('en', { hour12: false }) + '  ' + msg;
+            debugEl.appendChild(line);
+            debugEl.scrollTop = debugEl.scrollHeight;
+            console.log('[StudyDock]', msg);
+        }
+        function toggleDebug() {
+            debugEl.classList.toggle('visible');
+        }
+
+        // ---- Config ----
+        const firebaseConfig = {
+            apiKey: "AIzaSyASVdJsoEQTajPrXBvZWuNDCyyg5arDQek",
+            authDomain: "dashboard-4d62c.firebaseapp.com",
+            projectId: "dashboard-4d62c",
+            databaseURL: "https://dashboard-4d62c-default-rtdb.firebaseio.com",
+            storageBucket: "dashboard-4d62c.firebasestorage.app",
+            messagingSenderId: "364307656847",
+            appId: "1:364307656847:web:cd61a1ef49101961c640fa"
+        };
+
+        const PLAN_START = new Date('2026-06-01');
+        const ACCENT_MAP = {
+            'Physics': { color: '#60A5FA', bg: 'rgba(96,165,250,0.15)', orb: '#1e40af' },
+            'Math': { color: '#34D399', bg: 'rgba(52,211,153,0.15)', orb: '#065f46' },
+            'ECE': { color: '#A78BFA', bg: 'rgba(167,139,250,0.15)', orb: '#5b21b6' },
+            'Latin': { color: '#FBBF24', bg: 'rgba(251,191,36,0.15)', orb: '#78350f' },
+            'Coding': { color: '#F472B6', bg: 'rgba(244,114,182,0.15)', orb: '#831843' },
+            'General': { color: '#94A3B8', bg: 'rgba(148,163,184,0.15)', orb: '#334155' },
+        };
+
+        // ---- State ----
+        let session = null;
+        let timerInterval = null;
+
+        // ---- DOM refs (grabbed after DOMContentLoaded) ----
+        let idleScreen, studyScreen, idleTimeEl, idleDateEl, idleDayNumEl;
+        let studySubjectEl, studyTimerEl, studyTaskEl, studyProgressEl, studyCompleteEl;
+        let statusDot, orb1, orb2;
+
+        // ---- Clock ----
+        function updateClock() {
+            if (!idleTimeEl) return;
+            const now = new Date();
+            const h = now.getHours(), m = now.getMinutes();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            idleTimeEl.textContent = h12 + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            idleDateEl.textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+
+            const diff = Math.floor((now - PLAN_START) / 86400000) + 1;
+            idleDayNumEl.textContent = (diff >= 1 && diff <= 90) ? diff : (diff < 1 ? 'T-' + Math.abs(diff) : '✓');
+        }
+
+        // ---- Timer tick ----
+        function tickTimer() {
+            if (!session || !session.active || !session.timerEnd) return;
+            
+            // Adjust for clock offset between devices using the message timestamp
+            const clockOffset = Date.now() - (session.timestamp || Date.now());
+            const adjustedTimerEnd = session.timerEnd + clockOffset;
+            
+            const remaining = Math.max(0, adjustedTimerEnd - Date.now());
+            const totalMs = (session.timerMinutes || 25) * 60 * 1000;
+            const pct = Math.min(100, ((totalMs - remaining) / totalMs) * 100);
+
+            const secs = Math.ceil(remaining / 1000);
+            studyTimerEl.textContent = String(Math.floor(secs / 60)).padStart(2, '0') + ':' + String(secs % 60).padStart(2, '0');
+            studyProgressEl.style.width = pct + '%';
+
+            if (remaining <= 0) {
+                studyTimerEl.textContent = '00:00';
+                studyProgressEl.style.width = '100%';
+                studyCompleteEl.classList.remove('hidden');
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        // ---- Show idle ----
+        function showIdle() {
+            dbg('showIdle()', '#94A3B8');
+            idleScreen.classList.remove('hidden');
+            studyScreen.classList.add('hidden');
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            orb1.style.background = 'radial-gradient(circle, #1e40af, transparent 70%)';
+            orb2.style.background = 'radial-gradient(circle, #5b21b6, transparent 70%)';
+        }
+
+        // ---- Show study ----
+        function showStudy(data) {
+            dbg('showStudy() subject=' + data.subject + ' active=' + data.active, '#34D399');
+            session = data;
+            const accent = ACCENT_MAP[data.subject] || ACCENT_MAP['General'];
+
+            studySubjectEl.textContent = data.subject || 'Study';
+            studySubjectEl.style.background = accent.bg;
+            studySubjectEl.style.color = accent.color;
+            studyTaskEl.textContent = data.task || '';
+            studyCompleteEl.classList.add('hidden');
+            studyProgressEl.style.width = '0%';
+            studyProgressEl.style.background = accent.color;
+
+            orb1.style.background = 'radial-gradient(circle, ' + accent.orb + ', transparent 70%)';
+
+            idleScreen.classList.add('hidden');
+            studyScreen.classList.remove('hidden');
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(tickTimer, 250);
+            tickTimer();
+        }
+
+        // ---- Firebase init ----
+        function initFirebase() {
+            dbg('Checking for firebase global...', '#60A5FA');
+
+            if (typeof firebase === 'undefined') {
+                dbg('ERROR: firebase is undefined — SDK not loaded!', '#FC8181');
+                document.title = 'ERROR: No Firebase SDK';
+                return;
+            }
+            dbg('firebase global found', '#34D399');
+
+            let db;
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                dbg('initializeApp OK', '#34D399');
+            } catch (e) {
+                dbg('initializeApp FAILED: ' + e.message, '#FC8181');
+                return;
+            }
+
+            // Connection state
+            db.ref('.info/connected').on('value', snap => {
+                const connected = snap.val() === true;
+                statusDot.classList.toggle('disconnected', !connected);
+                dbg('Connection: ' + (connected ? 'online' : 'offline'), connected ? '#34D399' : '#FBBF24');
+            });
+
+            // The actual listener
+            dbg('Setting up studySession listener...', '#60A5FA');
+            db.ref('studySession').on('value', snap => {
+                const data = snap.val();
+                dbg('Snapshot received: ' + JSON.stringify(data), '#FBBF24');
+
+                if (data && data.active === true) {
+                    showStudy(data);
+                } else {
+                    showIdle();
+                }
+            }, err => {
+                dbg('Listener ERROR: ' + err.message, '#FC8181');
+            });
+        }
+
+        // ---- Boot (wait for DOM) ----
+        document.addEventListener('DOMContentLoaded', () => {
+            dbg('DOMContentLoaded fired', '#60A5FA');
+
+            idleScreen = document.getElementById('idle-screen');
+            studyScreen = document.getElementById('study-screen');
+            idleTimeEl = document.getElementById('idle-time');
+            idleDateEl = document.getElementById('idle-date');
+            idleDayNumEl = document.getElementById('idle-day-num');
+            studySubjectEl = document.getElementById('study-subject');
+            studyTimerEl = document.getElementById('study-timer');
+            studyTaskEl = document.getElementById('study-task');
+            studyProgressEl = document.getElementById('study-progress');
+            studyCompleteEl = document.getElementById('study-complete');
+            statusDot = document.getElementById('status-dot');
+            orb1 = document.getElementById('orb1');
+            orb2 = document.getElementById('orb2');
+
+            dbg('DOM refs grabbed', '#34D399');
+
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Give Firebase SDK scripts a moment to fully execute before we use them
+            setTimeout(initFirebase, 300);
+        });
+
+        // WakeLock
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    await navigator.wakeLock.request('screen');
+                    dbg('WakeLock acquired', '#34D399');
+                }
+            } catch (e) {
+                dbg('WakeLock failed: ' + e.message, '#FBBF24');
+            }
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') requestWakeLock();
+        });
+        requestWakeLock();
+    </script>
+</body>
+
+</html>

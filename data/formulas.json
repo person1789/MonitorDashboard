@@ -1,0 +1,31 @@
+{
+    "formulas": [
+        { "id": "f1",  "name": "Dot Product",                   "subject": "Linear Algebra",      "latex": "\\vec{a} \\cdot \\vec{b} = \\|a\\|\\|b\\|\\cos\\theta = \\sum a_i b_i" },
+        { "id": "f2",  "name": "Cross Product",                 "subject": "Linear Algebra",      "latex": "\\vec{a} \\times \\vec{b} = \\|a\\|\\|b\\|\\sin\\theta\\,\\hat{n}" },
+        { "id": "f3",  "name": "Determinant (2×2)",              "subject": "Linear Algebra",      "latex": "\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix} = ad - bc" },
+        { "id": "f4",  "name": "Eigenvalue Equation",            "subject": "Linear Algebra",      "latex": "A\\vec{v} = \\lambda\\vec{v} \\implies \\det(A - \\lambda I) = 0" },
+        { "id": "f5",  "name": "Euler's Formula",                "subject": "Calculus",            "latex": "e^{i\\theta} = \\cos\\theta + i\\sin\\theta" },
+        { "id": "f6",  "name": "Taylor Series",                  "subject": "Calculus",            "latex": "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n" },
+        { "id": "f7",  "name": "Fourier Series",                 "subject": "ODEs",                "latex": "f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty}\\left(a_n\\cos\\frac{n\\pi x}{L} + b_n\\sin\\frac{n\\pi x}{L}\\right)" },
+        { "id": "f8",  "name": "Laplace Transform",              "subject": "ODEs",                "latex": "\\mathcal{L}\\{f(t)\\} = \\int_0^{\\infty} f(t)e^{-st}\\,dt" },
+        { "id": "f9",  "name": "Gauss's Law",                    "subject": "E&M",                 "latex": "\\oint \\vec{E}\\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}" },
+        { "id": "f10", "name": "Faraday's Law",                  "subject": "E&M",                 "latex": "\\oint \\vec{E}\\cdot d\\vec{l} = -\\frac{d\\Phi_B}{dt}" },
+        { "id": "f11", "name": "Ampère–Maxwell Law",             "subject": "E&M",                 "latex": "\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0\\frac{d\\Phi_E}{dt}" },
+        { "id": "f12", "name": "Coulomb's Law",                  "subject": "E&M",                 "latex": "\\vec{F} = \\frac{1}{4\\pi\\epsilon_0}\\frac{q_1 q_2}{r^2}\\hat{r}" },
+        { "id": "f13", "name": "Lorentz Force",                  "subject": "E&M",                 "latex": "\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B})" },
+        { "id": "f14", "name": "Euler–Lagrange Equation",        "subject": "Classical Mechanics",  "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0" },
+        { "id": "f15", "name": "Hamiltonian",                    "subject": "Classical Mechanics",  "latex": "H = \\sum_i p_i \\dot{q}_i - L" },
+        { "id": "f16", "name": "Schrödinger Equation",           "subject": "Quantum Mechanics",   "latex": "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi" },
+        { "id": "f17", "name": "Heisenberg Uncertainty",          "subject": "Quantum Mechanics",   "latex": "\\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}" },
+        { "id": "f18", "name": "Infinite Square Well",           "subject": "Quantum Mechanics",   "latex": "E_n = \\frac{n^2\\pi^2\\hbar^2}{2mL^2},\\quad \\psi_n = \\sqrt{\\frac{2}{L}}\\sin\\frac{n\\pi x}{L}" },
+        { "id": "f19", "name": "Bayes' Theorem",                 "subject": "Probability",         "latex": "P(A|B) = \\frac{P(B|A)\\,P(A)}{P(B)}" },
+        { "id": "f20", "name": "Normal Distribution",            "subject": "Probability",         "latex": "f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}" },
+        { "id": "f21", "name": "Error Propagation",              "subject": "Probability",         "latex": "\\delta f = \\sqrt{\\sum_i\\left(\\frac{\\partial f}{\\partial x_i}\\right)^2(\\delta x_i)^2}" },
+        { "id": "f22", "name": "First Law of Thermodynamics",    "subject": "Thermodynamics",      "latex": "\\Delta U = Q - W" },
+        { "id": "f23", "name": "Entropy",                        "subject": "Thermodynamics",      "latex": "\\Delta S = \\int \\frac{dQ_{\\text{rev}}}{T} \\geq 0" },
+        { "id": "f24", "name": "Ideal Gas Law",                  "subject": "Thermodynamics",      "latex": "PV = nRT" },
+        { "id": "f25", "name": "Ohm's Law",                      "subject": "E&M",                 "latex": "V = IR" },
+        { "id": "f26", "name": "Kirchhoff's Voltage Law",        "subject": "E&M",                 "latex": "\\sum_{\\text{loop}} V_k = 0" },
+        { "id": "f27", "name": "Gram-Schmidt Process",           "subject": "Linear Algebra",      "latex": "\\vec{u}_k = \\vec{v}_k - \\sum_{j=1}^{k-1}\\frac{\\vec{v}_k \\cdot \\vec{u}_j}{\\vec{u}_j \\cdot \\vec{u}_j}\\vec{u}_j" }
+    ]
+}
